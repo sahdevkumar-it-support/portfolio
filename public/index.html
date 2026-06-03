@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
 
@@ -24,7 +24,9 @@
         <a href="#skills">Skills</a>
         <a href="#about">About</a>
         <a href="#gallery">Gallery</a>
+        <a href="#video-projects">Videos</a>
         <a href="#services">Services</a>
+        <a href="#contact" class="nav-cta">Contact Me</a>
       </div>
     </nav>
 
@@ -46,21 +48,31 @@
     </div>
 
     <div class="hero-right">
-      <div class="orbit orbit1"></div>
-      <div class="orbit orbit2"></div>
-      <div class="orbit orbit3"></div>
-
       <div class="center-circle">
         <div class="center-glow"></div>
         <span>ERP</span>
       </div>
 
-      <div class="tech-circle python">Python</div>
-      <div class="tech-circle flask">Flask</div>
-      <div class="tech-circle mysql">MySQL</div>
-      <div class="tech-circle sap">SAP</div>
-      <div class="tech-circle appscript">Apps Script</div>
-      <div class="tech-circle excel">Excel VBA</div>
+      <div class="orbit orbit-inner">
+        <div class="orbit-runner speed-fast">
+          <div class="tech-planet python" title="Python">🐍</div>
+        </div>
+      </div>
+
+      <div class="orbit orbit-mid">
+        <div class="orbit-runner speed-medium">
+          <div class="tech-planet flask" title="Flask">🌶️</div>
+          <div class="tech-planet mysql" title="MySQL">🐬</div>
+        </div>
+      </div>
+
+      <div class="orbit orbit-outer">
+        <div class="orbit-runner speed-slow">
+          <div class="tech-planet sap" title="SAP">💼</div>
+          <div class="tech-planet appscript" title="Google Apps Script">🟢</div>
+          <div class="tech-planet excel" title="Excel VBA">📊</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -147,9 +159,25 @@
       <span>Projects Gallery</span>
       <h2>Visual Overview</h2>
     </div>
-    <div class="marquee">
-      <div class="marquee-content" id="galleryContainer">
-        </div>
+    
+    <div class="marquee-container">
+      <div class="marquee-track" id="dynamicMarqueeTrack"></div>
+    </div>
+  </section>
+
+  <div class="image-preview" id="imagePreview">
+    <span class="close-preview" id="closePreview" onclick="closeLightbox()">&times;</span>
+    <img id="previewImg" alt="Preview Frame">
+  </div>
+
+  <section class="video-gallery-section" id="video-projects">
+    <div class="section-title">
+      <span>Demo Videos</span>
+      <h2>Automation In Action</h2>
+    </div>
+    
+    <div class="marquee-container video-marquee-container">
+      <div class="marquee-track video-marquee-track" id="dynamicVideoTrack"></div>
     </div>
   </section>
 
@@ -165,25 +193,21 @@
         <h3>Custom Software & Websites</h3>
         <p>Tailor-made web portals, business websites, and enterprise internal tools engineered with high-speed performance and flawless aesthetics.</p>
       </div>
-
       <div class="service-card-new">
         <div class="service-icon">⚡</div>
         <h3>ERP Solutions</h3>
         <p>Streamlined industrial enterprise resource tracking workflows and seamless SAP system data hooks.</p>
       </div>
-
       <div class="service-card-new">
         <div class="service-icon">🤖</div>
         <h3>Automation Systems</h3>
         <p>Full-spectrum custom Python microservices and Google Apps Script integrations to drop manual labor down to 0%.</p>
       </div>
-
       <div class="service-card-new">
         <div class="service-icon">🖥️</div>
         <h3>Web Applications</h3>
         <p>Modern interactive Flask management control rooms, responsive layouts, and analytical tracking nodes.</p>
       </div>
-
       <div class="service-card-new">
         <div class="service-icon">📱</div>
         <h3>Mobile Solutions</h3>
@@ -192,20 +216,147 @@
     </div>
   </section>
 
-  <div class="image-preview" id="imagePreview">
-    <span class="close-preview" id="closePreview">&times;</span>
-    <img id="previewImg" alt="Preview Visual">
-  </div>
+  <section class="contact-section" id="contact">
+    <div class="section-title">
+      <span>Get In Touch</span>
+      <h2>Contact For Collaboration</h2>
+    </div>
 
-  <div class="video-preview" id="videoPreview">
-    <span class="close-video" id="closeVideo">&times;</span>
-    <video id="previewVid" controls></video>
-  </div>
+    <div class="contact-container">
+      <div class="contact-info-cards">
+        <a href="https://wa.me/919399219252" target="_blank" class="info-card-link">
+          <div class="info-card-new">
+            <div class="info-icon text-whatsapp">💬</div>
+            <div class="info-details">
+              <h4>WhatsApp Chat</h4>
+              <p>+91 9399219252</p>
+              <span class="action-text">Tap to Chat Engine →</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="mailto:sahdevkumartech@gmail.com" class="info-card-link">
+          <div class="info-card-new">
+            <div class="info-icon text-email">✉️</div>
+            <div class="info-details">
+              <h4>Email Support</h4>
+              <p>sahdevkumartech@gmail.com</p>
+              <span class="action-text">Send Mail Core →</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="contact-form-container">
+        <form class="cyber-form" onsubmit="event.preventDefault(); alert('Message transmission successful!');">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Client Identity / Name</label>
+              <input type="text" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+              <label>Communication Email</label>
+              <input type="email" placeholder="Enter your email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Project Scope / Subject</label>
+            <input type="text" placeholder="e.g. ERP Automation, Custom Dashboard" required>
+          </div>
+          <div class="form-group">
+            <label>System Description / Message</label>
+            <textarea rows="5" placeholder="Describe your workflows or project requirement..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Initialize Connection ⚡</button>
+        </form>
+      </div>
+    </div>
+  </section>
 
   <footer>
     &copy; 2026 Sahdev Kumar • ERP & Automation Developer • Engineered to Perfection.
   </footer>
 
-  <script src="/static/js/gallery.js"></script>
+  <script>
+    // 1. Dynamic Image Gallery Engine
+    async function loadGalleryImages() {
+      const track = document.getElementById('dynamicMarqueeTrack');
+      try {
+        const response = await fetch('/services/images.json');
+        const images = await response.json();
+        const doubleImages = [...images, ...images];
+        
+        track.innerHTML = '';
+        doubleImages.forEach((imgUrl) => {
+          let cleanUrl = imgUrl.startsWith('public/') ? imgUrl.replace('public/', '/') : imgUrl;
+          if (!cleanUrl.startsWith('/')) cleanUrl = '/' + cleanUrl;
+
+          const card = document.createElement('div');
+          card.className = 'gallery-item-card';
+          card.setAttribute('onclick', 'openLightbox(this)');
+          
+          const imgName = cleanUrl.split('/').pop().replace('.png', '');
+          card.innerHTML = `
+            <img src="${cleanUrl}" alt="Project View ${imgName}">
+            <div class="gallery-item-overlay"><span>Expand View 🔍</span></div>
+          `;
+          track.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Image configurations load karne me dikkat aayi:", error);
+        track.innerHTML = `<p style="color: #ff4a4a; text-align: center; width: 100%;">Failed to load gallery visual elements.</p>`;
+      }
+    }
+
+    // 2. Dynamic Video Gallery Engine
+    async function loadGalleryVideos() {
+      const videoTrack = document.getElementById('dynamicVideoTrack');
+      try {
+        const response = await fetch('/services/videos.json');
+        const videoData = await response.json();
+        
+        // Endless integration ke liye double the data
+        const doubleVideos = [...videoData, ...videoData];
+        videoTrack.innerHTML = '';
+
+        doubleVideos.forEach((video) => {
+          const videoCard = document.createElement('div');
+          videoCard.className = 'video-card dynamic-video-card';
+          
+          // Isme controls=1 rakha hai taaki user direct volume/timeline manage kar sake
+          videoCard.innerHTML = `
+            <div class="video-wrapper">
+              <iframe src="https://www.youtube.com/embed/${video.id}?autoplay=0&mute=1&loop=1&playlist=${video.id}&controls=1&showinfo=0&rel=0&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+            <div class="video-info">
+              <h3>${video.title}</h3>
+              <p>${video.description}</p>
+            </div>
+          `;
+          videoTrack.appendChild(videoCard);
+        });
+      } catch (error) {
+        console.error("Video configuration file parse error:", error);
+        videoTrack.innerHTML = `<p style="color: #ff4a4a; text-align: center; width: 100%;">Failed to compile automation system videos track.</p>`;
+      }
+    }
+
+    // Lightbox Utilities
+    function openLightbox(element) {
+      const imgSrc = element.querySelector('img').src;
+      document.getElementById('previewImg').src = imgSrc;
+      document.getElementById('imagePreview').style.display = 'flex';
+    }
+    
+    function closeLightbox() {
+      document.getElementById('imagePreview').style.display = 'none';
+    }
+
+    // Dom Engine Bootstrap
+    window.addEventListener('DOMContentLoaded', () => {
+      loadGalleryImages();
+      loadGalleryVideos();
+    });
+  </script>
 </body>
 </html>

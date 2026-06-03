@@ -1,214 +1,125 @@
-/* =========================================
-   IMAGE GALLERY
-========================================= */
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.getElementById("galleryContainer");
+  const imgPreview = document.getElementById("imagePreview");
+  const previewImg = document.getElementById("previewImg");
+  const closePreview = document.getElementById("closePreview");
 
-const galleryContainer =
-document.getElementById("galleryContainer");
+  // Relative path configuration for Next.js public distribution
+  const jsonPath = "services/images.json"; 
 
-const imagePreview =
-document.getElementById("imagePreview");
+  // Fallback production array if JSON fails or structure mismatch occurs
+  const fallbackImages = [
+    "services/1.png", "services/2.png", "services/3.png", "services/4.png", 
+    "services/5.png", "services/6.png", "services/7.png", "services/8.png", 
+    "services/9.png", "services/10.png", "services/11.png", "services/12.png", 
+    "services/13.png", "services/14.png", "services/15.png", "services/17.png"
+  ];
 
-const previewImg =
-document.getElementById("previewImg");
+  // =========================================
+  /* IMAGE GALLERY RENDER LOGIC */
+  // =========================================
+  function renderGallery(imageArray) {
+    if (!container) return;
+    container.innerHTML = ""; // Clear existing elements
 
-const closePreview =
-document.getElementById("closePreview");
+    // Double the items for seamless infinite marquee loop tracking
+    const doubleArray = [...imageArray, ...imageArray];
 
-async function loadGallery(){
+    doubleArray.forEach((src) => {
+      const card = document.createElement("div");
+      card.className = "gallery-card";
 
-  try{
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "Industrial Project Snapshot";
+      img.loading = "lazy";
 
-    const response =
-    await fetch("/services/images.json");
+      card.appendChild(img);
+      container.appendChild(card);
 
-    const images =
-    await response.json();
+      // Lightbox preview setup
+      card.addEventListener("click", () => {
+        if (imgPreview && previewImg) {
+          previewImg.src = src;
+          imgPreview.style.display = "flex";
+        }
+      });
+    });
+  }
 
-    images.forEach(image => {
-
-      createImage(image);
-
+  // Fetch data dynamically from JSON file
+  fetch(jsonPath)
+    .then((response) => {
+      if (!response.ok) throw new Error("JSON response failed");
+      return response.json();
+    })
+    .then((data) => {
+      // Expecting array structure inside JSON file
+      if (Array.isArray(data)) {
+        renderGallery(data);
+      } else if (data.images && Array.isArray(data.images)) {
+        renderGallery(data.images);
+      } else {
+        renderGallery(fallbackImages);
+      }
+    })
+    .catch((err) => {
+      console.warn("Gallery routing fallback initiated:", err.message);
+      renderGallery(fallbackImages);
     });
 
-    images.forEach(image => {
+  // Close image preview systems
+  if (closePreview) {
+    closePreview.addEventListener("click", () => {
+      imgPreview.style.display = "none";
+    });
+  }
 
-      createImage(image);
+  if (imgPreview) {
+    imgPreview.addEventListener("click", (e) => {
+      if (e.target === imgPreview) {
+        imgPreview.style.display = "none";
+      }
+    });
+  }
 
+  // =========================================
+  /* YOUTUBE LIGHTBOX PREVIEW LOGIC */
+  // =========================================
+  const ytVideoCards = document.querySelectorAll(".video-card");
+  const ytModal = document.getElementById("videoPreview");
+  const ytPreviewIframe = document.getElementById("previewVid");
+  const ytCloseBtn = document.getElementById("closeVideo");
+
+  if (ytVideoCards.length > 0 && ytModal && ytPreviewIframe) {
+    ytVideoCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        // HTML ke 'data-video-id' se automatic ID utha lega, yahan koi link badalne ki zaroorat NAHI hai!
+        const videoId = card.getAttribute("data-video-id");
+        
+        // Modal me video auto-play aur sound ke saath start hogi
+        const ytEmbedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+        
+        ytPreviewIframe.src = ytEmbedUrl;
+        ytModal.style.display = "flex";
+      });
     });
 
-  }
+    // Close Button logic
+    if (ytCloseBtn) {
+      ytCloseBtn.addEventListener("click", () => {
+        ytModal.style.display = "none";
+        ytPreviewIframe.src = ""; // Source blank karne se video ki sound band ho jati hai
+      });
+    }
 
-  catch(error){
-
-    console.log(error);
-
-  }
-
-}
-
-function createImage(image){
-
-  const card =
-  document.createElement("div");
-
-  card.classList.add("gallery-card");
-
-  card.innerHTML = `
-    <img src="/services/${image}" alt="">
-  `;
-
-  const img =
-  card.querySelector("img");
-
-  img.addEventListener("click", () => {
-
-    imagePreview.style.display = "flex";
-
-    previewImg.src =
-    `/services/${image}`;
-
-  });
-
-  galleryContainer.appendChild(card);
-
-}
-
-closePreview.addEventListener("click", () => {
-
-  imagePreview.style.display = "none";
-
-});
-
-imagePreview.addEventListener("click", (e) => {
-
-  if(e.target === imagePreview){
-
-    imagePreview.style.display = "none";
-
-  }
-
-});
-
-
-/* =========================================
-   YOUTUBE VIDEOS
-========================================= */
-
-const videoContainer =
-document.getElementById("videoContainer");
-
-async function loadVideos(){
-
-  try{
-
-    const response =
-    await fetch("/videos/videos.json");
-
-    const videos =
-    await response.json();
-
-    videos.forEach(video => {
-
-      createVideo(video);
-
+    // Modal background click close logic
+    ytModal.addEventListener("click", (e) => {
+      if (e.target === ytModal) {
+        ytModal.style.display = "none";
+        ytPreviewIframe.src = ""; // Source blank karne se video ki sound band ho jati hai
+      }
     });
-
-  }
-
-  catch(error){
-
-    console.log(error);
-
-  }
-
-}
-
-function createVideo(video){
-
-  const card =
-  document.createElement("div");
-
-  card.classList.add("video-card");
-
-  card.innerHTML = `
-
-    <video
-      muted
-      loop
-      playsinline
-      preload="metadata"
-      style="
-      width:100%;
-      border-radius:15px;
-      cursor:pointer;
-      "
-    >
-      <source src="/videos/${video}">
-    </video>
-
-  `;
-
-  const videoElement =
-  card.querySelector("video");
-
-  // Mouse enter = autoplay preview
-
-  videoElement.addEventListener("mouseenter", () => {
-
-    videoElement.play();
-
-  });
-
-  // Mouse leave = stop preview
-
-  videoElement.addEventListener("mouseleave", () => {
-
-    videoElement.pause();
-
-    videoElement.currentTime = 0;
-
-  });
-
-  // Click = full popup video
-
-  videoElement.addEventListener("click", () => {
-
-    videoPreview.style.display = "flex";
-
-    previewVideo.src =
-    `/videos/${video}`;
-
-    previewVideo.load();
-
-    previewVideo.play();
-
-  });
-
-  videoContainer.appendChild(card);
-
-}
-closeVideo.addEventListener("click", () => {
-
-  videoPreview.style.display = "none";
-
-  previewVideo.pause();
-
-  previewVideo.currentTime = 0;
-
-});
-
-videoPreview.addEventListener("click", (e) => {
-
-  if(e.target === videoPreview){
-
-    videoPreview.style.display = "none";
-
-    previewVideo.pause();
-
-    previewVideo.currentTime = 0;
-
   }
 
 });
-loadGallery();
-loadVideos();
